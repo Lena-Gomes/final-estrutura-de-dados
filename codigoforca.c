@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define TAMANHO_ALFABETO 26    	
-#define MAX_TENTATIVAS 5       	
+#define MAX_TENTATIVAS 6       	
 #define TAMANHO_MAXIMO_PALAVRA 30
 #define MAX_ERROS_PARA_DICA 3  	
 
@@ -100,7 +100,6 @@ void jogarForca(NodoTrie *raiz, char listaDePalavras[][TAMANHO_MAXIMO_PALAVRA], 
 
     printf("Olá meninas e meninos tudo bom? \n Bem-vindo ao JOGO DA FORCA!\n");
 
-
     while (tentativasRestantes > 0 && !palavraCompleta) {  // Continua até o jogador vencer ou perder
         printf("\nNúmero de Tentativas: %d\n", tentativasRestantes);
         mostrarProgressoDaPalavra(palavraEscolhida, letrasAdivinhadas);  
@@ -119,6 +118,7 @@ void jogarForca(NodoTrie *raiz, char listaDePalavras[][TAMANHO_MAXIMO_PALAVRA], 
         if (!letraCorreta) {
             tentativasRestantes--;  // Se a letra estiver errada, diminui o número de tentativas
             erros++;
+            printf("Você errou a letra, tente novamente.\n");  // Mensagem de erro
             if (erros == MAX_ERROS_PARA_DICA) {
                 mostrarDica(listaDeClasses[indiceDaPalavra], listaDeDicas[indiceDaPalavra]);  // Mostra a dica após 3 erros
             }
@@ -160,36 +160,39 @@ int main() {
         // Cores
         "preto", "azul", "vermelho", "verde", "rosa", "amarelo", "marrom", "roxo", "branco", "laranja",
         // Objetos escolares
-        "lapis", "caneta", "borracha", "caderno", "livro", "estojo", "tesoura", "régua", "grampeador", "mochila"
+        "lapis", "borracha", "caneta", "apontador", "caderno", "mochila", "regua", "estojo", "livro", "agenda"
     };
 
+    // Classes correspondentes
     char listaDeClasses[40][30] = {
-        "Animal", "Animal", "Animal", "Animal", "Animal", "Animal", "Animal", "Animal", "Animal", "Animal",
-        "Fruta", "Fruta", "Fruta", "Fruta", "Fruta", "Fruta", "Fruta", "Fruta", "Fruta", "Fruta",
-        "Cor", "Cor", "Cor", "Cor", "Cor", "Cor", "Cor", "Cor", "Cor", "Cor",
-        "Objeto", "Objeto", "Objeto", "Objeto", "Objeto", "Objeto", "Objeto", "Objeto", "Objeto", "Objeto"
+        "Animais domésticos", "Animais domésticos", "Animais domésticos", "Animais domésticos", "Animais domésticos",
+        "Animais domésticos", "Animais domésticos", "Animais domésticos", "Animais domésticos", "Animais domésticos",
+        "Frutas", "Frutas", "Frutas", "Frutas", "Frutas", "Frutas", "Frutas", "Frutas", "Frutas", "Frutas",
+        "Cores", "Cores", "Cores", "Cores", "Cores", "Cores", "Cores", "Cores", "Cores", "Cores",
+        "Objetos escolares", "Objetos escolares", "Objetos escolares", "Objetos escolares", "Objetos escolares", "Objetos escolares",
+        "Objetos escolares", "Objetos escolares", "Objetos escolares", "Objetos escolares"
     };
 
+    // Dicas correspondentes
     char listaDeDicas[40][TAMANHO_MAXIMO_PALAVRA] = {
-        "Orelhas grandes e gosta de cenouras.", "Melhor amigo do homem.", "Adora caçar ratos.", "Pequeno e fofinho.", "Pode imitar a fala humana.", 
-        "Gosta de cantar em gaiolas.", "Acorda cedo para cantar.", "Canta em gaiolas e é pequeno.", "Nada em lagoas.", "Pequeno animal que grita muito.",
-        "Fruta marrom por fora e verde por dentro.", "Fruta vermelha e crocante.", "Fruta pequena e roxa.", "Fruta grande e suculenta.", "Cítrica e rica em vitamina C.",
-        "Bebida azeda e doce.", "Fruta verde com caroço grande.", "Fruta brasileira, de cor amarelada.", "Fruta macia e doce.", "Fruta tropical e azeda.",
-        "Cor de noite.", "Cor do céu e do mar.", "Cor do sangue.", "Cor da grama.", "Cor das flores mais delicadas.", 
-        "Cor dos girassóis.", "Cor da madeira.", "Cor da uva.", "Cor da neve.", "Cor de fruta cítrica.",
-        "Ferramenta para escrever.", "Ferramenta de tinta para escrever.", "Usada para apagar erros.", "Usado para tomar notas.", "Contém muito conhecimento.",
-        "Guarda itens escolares.", "Ferramenta para cortar.", "Ferramenta para medir.", "Ferramenta para unir papéis.", "Carrega todos os itens escolares."
+        "Este animal é conhecido por suas orelhas longas", "Amigo fiel", "Animal felino de pequeno porte", "Um pequeno roedor", "Pássaro que fala",
+        "Pássaro verde e pequeno", "Produz ovos", "Pássaro amarelo", "Nada em lagoas", "Um porco pequeno",
+        "Fruta com polpa verde e peluda", "Fruta crocante", "Fruta pequena e roxa", "Fruta tropical suculenta", "Cítrica e rica em vitamina C",
+        "É uma bebida de limão", "Fruta com caroço", "Fruta tropical com casca amarela", "Fruta macia e doce", "Fruta com cajuína",
+        "Cor da escuridão", "Cor do céu", "Cor da paixão", "Cor da natureza", "Cor da flor rosa", "Cor do sol",
+        "Cor da terra", "Cor da lavanda", "Cor da neve", "Cor de laranja",
+        "Usado para desenhar", "Apaga erros", "Escreve em cadernos", "Aponta lápis", "Onde se escreve",
+        "Carrega materiais", "Usado para medir", "Onde se guarda canetas", "Tem muitas páginas", "Organiza horários"
     };
 
-    NodoTrie *raiz = criarNovoNodo();
+    NodoTrie *raiz = criarNovoNodo();  // Cria a raiz da árvore TRIE
 
-    // Adiciona todas as palavras do banco de palavras na árvore TRIE
+    // Adiciona todas as palavras à TRIE
     for (int i = 0; i < 40; i++) {
         adicionarPalavra(raiz, listaDePalavras[i]);
     }
 
-    jogarForca(raiz, listaDePalavras, listaDeClasses, listaDeDicas, 40);
+    jogarForca(raiz, listaDePalavras, listaDeClasses, listaDeDicas, 40);  // Inicia o jogo da forca
 
-    // Libera a memória da árvore TRIE (a função de liberar a árvore ainda precisa ser implementada)
     return 0;
 }
